@@ -1,30 +1,17 @@
+dist: xenial
 language: python
 python:
-  - "3.8"  
-install: 
-  - pip install -r requirements.txt
+- '3.8'
+install:
+- pip install -r requirements.txt
+script:
+- tar -cvf app.tar app.py
 
-# 자바는 빌드 해서 war/jar 를 떨구고 배포하는데 플라스크는 딱히 떨구는게없는거같은데 
-# tar로 아카이빙해서 떨구기?
-# 헬스 체크같은 테스트를 만들어서 테스트를해야 CI단계의 의미가 생기려나
-script: 
-  - flask --app app run
-
-# 첫 배포 후, 두번째/세번째 배포 상황 고려해야함
-# 기존의 가동중이던 앱 중지
-before_deploy:
-  - ./stop.sh
-
-# https://docs.travis-ci.com/user/deployment/codedeploy/
 deploy:
-  - provider: codedeploy
-    revision_type: github
-    access_key_id: "AKIAYEZB2I6QGEJQBOGP"
-    secret_access_key: ""
-    application: "cicd-app"
-    deployment_group: "cicd-deploygroup"
-    region: "ap-northeast-2"
-
-# 기존 소스파일 삭제
-after_deploy:
-  - ./remove.sh
+  - provider: s3
+    access_key_id: AKIAYVTLQACXC52UHBWY
+    bucket: tfstate345323
+    skip_cleanup: true
+    region: ap-northeast-2
+    secret_access_key:
+      secure: ItVZuXPuvRIQes+LFhX57twt9yYO7LxeUfMAdYb9dloZCOAJamdb0fcCgFVmVDsvstmwSp3yXbaxZpFHa0BgKnHOFaGldh8FLrhUcGWPKlBkFsw73VNBsxiSduJ1t4LQuoSM0newl4ojPFoCbm8DYRvOu05bK708GYv6qfd3SbT06OYWXxZ2HUrLd+Yfi8F4kZpYJl6XCiVPIw4vwxW9L13h7M4EWGPasfr4NnIGB9Vh3Gw08CqYV53wCBvWD26EZSwKKKu12FpwM99cdGRmkFGfahiJc2obgNA6oM1voKOgXwDf2H75eQgfH7JzgP+w9MSE7ibCUUuAy34HjbGVllwXKYTbHYnbHq/FLxY62CyVoLEx7G1zhlO+ibGaJLiROOodwwPC6XOZC0ysCPVZMuV11CzlIpu4nZjO9eVAzTqWgnli69MhV3SSwG43TCp9qBPD313XpzAYfb6/C8mpGzVLrDazQOwZdddtcT0k5HYSGTfKWvxbWMnSJMlH8M4db9p8UrcUSx4r/3iWELZ/vmtcieWxZyu8nAlfTI0TjBumm0ayN1Qe1zCUWIS6YqjYqSLKllM7FgrN44ZDWRs6FSSbxXzSYemJa4/dOgVJfX+DTukxrKSP3A5Xg8Kjyc/GjiHtZ+6YbeD+Juhqo5lrKwwHggIucdwbyUrfRl8gzr0=
