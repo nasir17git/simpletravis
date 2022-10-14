@@ -1,0 +1,30 @@
+language: python
+python:
+  - "3.8"  
+install: 
+  - pip install -r requirements.txt
+
+# 자바는 빌드 해서 war/jar 를 떨구고 배포하는데 플라스크는 딱히 떨구는게없는거같은데 
+# tar로 아카이빙해서 떨구기?
+# 헬스 체크같은 테스트를 만들어서 테스트를해야 CI단계의 의미가 생기려나
+script: 
+  - flask --app app run
+
+# 첫 배포 후, 두번째/세번째 배포 상황 고려해야함
+# 기존의 가동중이던 앱 중지
+before_deploy:
+  - ./stop.sh
+
+# https://docs.travis-ci.com/user/deployment/codedeploy/
+deploy:
+  - provider: codedeploy
+    revision_type: github
+    access_key_id: "AKIAYEZB2I6QGEJQBOGP"
+    secret_access_key: ""
+    application: "cicd-app"
+    deployment_group: "cicd-deploygroup"
+    region: "ap-northeast-2"
+
+# 기존 소스파일 삭제
+after_deploy:
+  - ./remove.sh
