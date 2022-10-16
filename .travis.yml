@@ -20,7 +20,7 @@ deploy:
       secure: ItVZuXPuvRIQes+LFhX57twt9yYO7LxeUfMAdYb9dloZCOAJamdb0fcCgFVmVDsvstmwSp3yXbaxZpFHa0BgKnHOFaGldh8FLrhUcGWPKlBkFsw73VNBsxiSduJ1t4LQuoSM0newl4ojPFoCbm8DYRvOu05bK708GYv6qfd3SbT06OYWXxZ2HUrLd+Yfi8F4kZpYJl6XCiVPIw4vwxW9L13h7M4EWGPasfr4NnIGB9Vh3Gw08CqYV53wCBvWD26EZSwKKKu12FpwM99cdGRmkFGfahiJc2obgNA6oM1voKOgXwDf2H75eQgfH7JzgP+w9MSE7ibCUUuAy34HjbGVllwXKYTbHYnbHq/FLxY62CyVoLEx7G1zhlO+ibGaJLiROOodwwPC6XOZC0ysCPVZMuV11CzlIpu4nZjO9eVAzTqWgnli69MhV3SSwG43TCp9qBPD313XpzAYfb6/C8mpGzVLrDazQOwZdddtcT0k5HYSGTfKWvxbWMnSJMlH8M4db9p8UrcUSx4r/3iWELZ/vmtcieWxZyu8nAlfTI0TjBumm0ayN1Qe1zCUWIS6YqjYqSLKllM7FgrN44ZDWRs6FSSbxXzSYemJa4/dOgVJfX+DTukxrKSP3A5Xg8Kjyc/GjiHtZ+6YbeD+Juhqo5lrKwwHggIucdwbyUrfRl8gzr0=
     on: 
       all_branches: true
-    - provider: codedeploy
+  - provider: codedeploy
     access_key_id: AKIAYVTLQACXC52UHBWY
     bucket: nasirbucket4342
     region: ap-northeast-2
