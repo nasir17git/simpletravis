@@ -26,8 +26,6 @@ deploy:
       all_branches: true
     local_dir: deploy
     upload-dir: cicd-test
-
-deploy:
   - provider: codedeploy
     access_key_id: AKIAYVTLQACXC52UHBWY
     bucket: nasirbucket4342
