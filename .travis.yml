@@ -8,10 +8,8 @@ install:
 
 script:
 - tar -cvf app.tar . --exclude="*.git"
-
-before_deploy:
-  - mkdir deploy
-  - cp app.tar deploy/app.tar
+- mkdir deploy
+- cp app.tar deploy/app.tar
 
 deploy:
   - provider: s3
