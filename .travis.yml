@@ -24,6 +24,7 @@ deploy:
       all_branches: true
     local_dir: deploy
     upload_dir: cicd-test
+    skip_cleanup: true
   - provider: codedeploy
     access_key_id: AKIAYVTLQACXC52UHBWY
     bucket: nasirbucket4342
