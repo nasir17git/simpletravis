@@ -1,7 +1,7 @@
 dist: xenial
 os: linux
 language: python
-python:add .
+python:
 - '3.8'
 install:
 - pip install -r requirements.txt
@@ -9,7 +9,7 @@ install:
 script:
 - tar -cvf app.tar . --exclude="*.git"
 
-before_deploy:
+after_script:
   - mkdir deploy
   - cp app.tar deploy/app.tar
 
