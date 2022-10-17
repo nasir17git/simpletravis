@@ -11,7 +11,7 @@ script:
 
 after_script:
   - mkdir deploy
-  - mv app.tar deploy/app.tar
+  - cp app.tar deploy/app.tar
 
 deploy:
   - provider: s3
