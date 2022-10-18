@@ -1,8 +1,5 @@
 dist: xenial
 os: linux
-language: python
-python:
-- '3.8'
 
 script:
 - tar -cvf app.tar ./deploy
