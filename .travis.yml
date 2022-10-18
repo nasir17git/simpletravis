@@ -13,11 +13,6 @@ before_install:
 install:
 - tar -cvf app.tar ./deploy
 
-
 script:
 - aws s3 cp ./app.tar s3://nasirbucket4342/lendit-cicd-test
-- aws deploy create-deployment --application-name cicd-test \
---deployment-config-name CodeDeployDefault.OneAtATime \
---deployment-group-name cicd-test \
---description "221018" \
---s3-location bucket=nasirbucket4342,bundleType=tar,key=lendit-cicd-test/app.tar
+- aws deploy create-deployment --application-name cicd-test --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name cicd-test --description "221018-v2" --s3-location bucket=nasirbucket4342,bundleType=tar,key=lendit-cicd-test/app.tar
