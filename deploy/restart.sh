@@ -18,7 +18,7 @@ fi
 
 #python 확인
 count=$(ps -ef | grep python | wc -l)
-pid=$(netstat -tnlp | grep python | awk {'print $7'} | cut -d "/" -f1)
+pid=$(sudo netstat -tnlp | grep python | awk {'print $7'} | cut -d "/" -f1)
 
 
 if [[ $count > 1 ]];
@@ -35,6 +35,9 @@ source venv/bin/activate
 
 #install
 pip install flask
+
+#pip upgrade
+pip install --upgrade pip
 
 #run
 nohup flask --app app run > nohup.out 2>&1 &
