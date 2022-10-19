@@ -6,7 +6,6 @@ python:
 
 before_install:
 - if ! [ -x "$(command -v aws)" ]; then curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" ; unzip awscliv2.zip ; sudo ./aws/install ; fi
-- pip installhttp://internal-alb-1299181511.ap-northeast-2.elb.amazonaws.com/
 
 install:
 - tar -cvf app.tar ./deploy
