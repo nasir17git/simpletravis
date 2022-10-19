@@ -6,10 +6,13 @@ python:
 
 before_install:
 - if ! [ -x "$(command -v aws)" ]; then curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" ; unzip awscliv2.zip ; sudo ./aws/install ; fi
+- pip3 install -r requirements.txt
 
 install:
+- flake8 ./source/app.py
+- cp ./source/* ./deploy
 - tar -cvf app.tar ./deploy
 
 script:
 - aws s3 cp ./app.tar s3://nasirbucket4342/lendit-cicd-test/
-- aws deploy create-deployment --application-name 221019 --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name 221019 --s3-location bucket=nasirbucket4342,bundleType=tar,key=lendit-cicd-test/app.tar
+- aws deploy create-deployment --application-name test --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name test --s3-location bucket=nasirbucket4342,bundleType=tar,key=lendit-cicd-test/app.tar
