@@ -9,7 +9,7 @@ before_install:
 - pip3 install -r requirements.txt
 
 install:
-- flake8 ./source/app.py
+- flake8 ./source/ --select=E9,F63,F7,F82 --show-source --statistics
 - cp ./source/* ./deploy
 - tar -cvf app.tar ./deploy
 
