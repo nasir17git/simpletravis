@@ -1,0 +1,68 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Validate python, tar files, deploy to EC2
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the dev branch
+on:
+  push:
+    branches: [ main ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs: python
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: scripts
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: py-actions/flake8@v2.2.0
+        with: 
+          path: ./source/
+          update-pip: true
+          args: --select=E9,F63,F7,F82 --show-source --statistics
+
+jobs: tar
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: scripts
+    steps:
+      - name: dir
+        run: mkdir upload
+      - name: cp
+        run: cp -r source deploy/* upload/
+      - name: tar
+        run: tar -cvf app.tar ./upload
+
+jobs: aws
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: scripts  
+    steps:
+      - name: aws  
+        uses: aws-actions/configure-aws-credentials@v1
+        with: 
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          
+      - name: s3 업로드
+        run: aws s3 cp ./app.tar s3://nasirbucket4342/lendit-cicd-test/
+        
+      - name: 배포 생성
+        run: |
+  aws deploy create-deployment --application-name test \
+  --deployment-config-name CodeDeployDefault.AllAtOnce \
+  --deployment-group-name test \
+  --s3-location bucket=nasirbucket4342,bundleType=tar,key=lendit-cicd-test/app.tar
