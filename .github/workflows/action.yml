@@ -5,41 +5,44 @@ on:
   push:
     branches: [main]
 
-jobs: python
-  runs-on: ubuntu-latest
-  steps:
-    - uses: py-actions/flake8@v2.2.0
-      with: 
-        path: ./source/
-        update-pip: true
-        args: --select=E9,F63,F7,F82 --show-source --statistics
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: py-actions/flake8@v2.2.0
+        with: 
+          path: ./source/
+          update-pip: true
+          args: --select=E9,F63,F7,F82 --show-source --statistics
 
-jobs: tar
-  runs-on: ubuntu-latest
-  steps:
-    - name: dir
-      run: mkdir upload
-    - name: cp
-      run: cp -r source deploy/* upload/
-    - name: tar
-      run: tar -cvf app.tar ./upload
+jobs:
+  tar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: dir
+        run: mkdir upload
+      - name: cp
+        run: cp -r source deploy/* upload/
+      - name: tar
+        run: tar -cvf app.tar ./upload
 
-jobs: aws
-  runs-on: ubuntu-latest
-  steps:
-    - name: aws
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+jobs:
+  aws:
+    runs-on: ubuntu-latest
+    steps:
+      - name: aws 
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-     - name: s3 업로드
-      run: aws s3 cp ./app.tar s3://nasirbucket4342/lendit-cicd-test/
+      - name: s3 업로드
+        run: aws s3 cp ./app.tar s3://nasirbucket4342/lendit-cicd-test/
 
-     - name: 배포 생성
-      run: |
-          aws deploy create-deployment --application-name test \
-          --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --deployment-group-name test \
-          --s3-location bucket=nasirbucket4342,bundleType=tar,key=lendit-cicd-test/app.tar
+      - name: 배포 생성
+        run: |
+            aws deploy create-deployment --application-name test \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --deployment-group-name test \
+            --s3-location bucket=nasirbucket4342,bundleType=tar,key=lendit-cicd-test/app.tar
