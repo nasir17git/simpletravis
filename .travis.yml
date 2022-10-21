@@ -11,7 +11,7 @@ before_install:
     unzip awscliv2.zip 
     sudo ./aws/install 
   fi
-- pip3 install -r requirements.txt
+- pip3 install flake8
 - mkdir upload
 
 install:
