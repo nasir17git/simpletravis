@@ -2,27 +2,38 @@
 name: automation
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.5.0
+     
+      - name: lint
+        uses: py-actions/flake8@v2.2.0
+        with: 
+          path: ./source/
+          update-pip: true
+          args: --select=E9,F63,F7,F82 --show-source --statistics
+
   tar:
     runs-on: ubuntu-latest
     steps:
-      - name: where
-        run : ls -alh
-
+      - name: Checkout
+        uses: actions/checkout@v2.5.0
       - name: dir
         run: mkdir upload
-
       - name: cp
         run: cp -r source deploy/* upload/
-
       - name: tar
         run: tar -cvf app.tar ./upload
   aws:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2.5.0
       - name: aws 
         uses: aws-actions/configure-aws-credentials@v1
         with:
