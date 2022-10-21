@@ -1,9 +1,9 @@
 version: 0.0
 os: linux
 files:
-  - source: app.py
+  - source: /source/app.py
     destination: /home/ec2-user/
-  - source : cicd.conf
+  - source : /deploy/cicd.conf
     destination: /etc/nginx/conf.d/
 permissions:
   - object: /home/ec2-user/
