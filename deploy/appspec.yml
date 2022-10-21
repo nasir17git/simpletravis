@@ -3,7 +3,7 @@ os: linux
 files:
   - source: /source/app.py
     destination: /home/ec2-user/
-  - source : /deploy/cicd.conf
+  - source : cicd.conf
     destination: /etc/nginx/conf.d/
 permissions:
   - object: /home/ec2-user/
