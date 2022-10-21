@@ -25,9 +25,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.5.0
 
-      - name: where
-        run: pwd && ls -al   
-
       - name: dir
         run: mkdir upload
 
@@ -37,6 +34,13 @@ jobs:
       - name: tar
         run: tar -cvf app.tar ./upload
 
+      - name: where
+        run: pwd && ls -al   
+
+  aws:
+    needs: tar
+    runs-on: ubuntu-latest
+    steps:
       - name: aws 
         uses: aws-actions/configure-aws-credentials@v1
         with:
