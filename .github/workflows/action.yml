@@ -7,6 +7,7 @@ on:
 
 jobs:
   tar:
+    runs-on: ubuntu-latest
     steps:
       - name: where
         run : ls -alh
@@ -16,10 +17,11 @@ jobs:
 
       - name: cp
         run: cp -r source deploy/* upload/
-        
+
       - name: tar
         run: tar -cvf app.tar ./upload
   aws:
+    runs-on: ubuntu-latest
     steps:
       - name: aws 
         uses: aws-actions/configure-aws-credentials@v1
