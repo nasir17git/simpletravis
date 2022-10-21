@@ -24,24 +24,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2.5.0
+
+      - name: where
+        run: pwd && ls -al   
+
       - name: dir
         run: mkdir upload
+
       - name: cp
         run: cp -r source deploy/* upload/
+
       - name: tar
         run: tar -cvf app.tar ./upload
-  aws:
-    needs: tar
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2.5.0
+
       - name: aws 
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: where
+        run: pwd && ls -al   
 
       - name: s3 업로드
         run: aws s3 cp ./app.tar s3://nasirbucket4342/lendit-cicd-test/
