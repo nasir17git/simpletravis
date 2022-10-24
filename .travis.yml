@@ -21,7 +21,7 @@ install:
 
 script:
 - aws s3 cp ./app.tar s3://nasirbucket4342/lendit-cicd-test/
-- |
+- >-
   aws deploy create-deployment --application-name test \
   --deployment-config-name CodeDeployDefault.AllAtOnce \
   --deployment-group-name test \
