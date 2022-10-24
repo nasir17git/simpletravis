@@ -9,7 +9,7 @@ function Python_Config(){
   python3 -m venv venv
   source venv/bin/activate
   pip3 install --upgrade pip
-  pip3 install -r requirements.txt
+  pip3 install -r requirement.txt
   nohup python app_$APP_PORT.py &
   sleep 5
 }
@@ -50,7 +50,7 @@ else
   #폴더 생성 및 APP파일 복사
   mkdir lendit lendit2
   cp source/app_$CURRENT_PORT.py $DEPLOY_DIRECTORY/lendit
-  xargs -n 1 cp -v requirements.txt <<<"$DEPLOY_DIRECTORY/lendit $DEPLOY_DIRECTORY/lendit2"
+  xargs -n 1 cp -v requirement.txt <<<"$DEPLOY_DIRECTORY/lendit $DEPLOY_DIRECTORY/lendit2"
   cd $DEPLOY_DIRECTORY/lendit
   
   #Python 설정
