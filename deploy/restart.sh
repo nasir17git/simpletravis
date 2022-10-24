@@ -1,63 +1,129 @@
 #!/bin/bash
-cd ~
 
-#nginx 활성화
-sudo systemctl enable nginx
-sudo systemctl start nginx
+#Define Directory and Port
+DEPLOY_DIRECTORY=/home/deploy
+NGINX_DIRECTORY=/etc/nginx/conf.d
 
-#2번째 배포 위한 nginx 문법체크
-sudo nginx -t && sudo systemctl reload nginx
+#Function Define
+function Python_Config(){
+  python3 -m venv venv
+  source venv/bin/activate
+  pip3 install --upgrade pip
+  pip3 install -r requirement.txt
+  nohup python app_$APP_PORT.py &
+  sleep 5
+}
 
-if [[ $? != 0 ]];
-then
- echo "nginx syntax Error"
- exit
+function Health_Check() {
+  if [[ $(curl -s 127.0.0.1/health_check | grep -o "OK") ]];
+    then
+  echo "Health_Check OK"
+    else
+  echo "Health_Check Fail"
+  exit 1
+  fi
+}
+
+function Nginx_Check(){
+  sudo nginx -t
+  if [[ $? == 0 ]]; then
+    echo "Nginx Syntax Success"
+  else
+    echo "Nginx Syntax Error!!"
+    exit 1
+  fi
+}
+
+#Script Start
+cd $DEPLOY_DIRECTORY
+
+#첫 배포일 때,
+if [[ -n $(cat $NGINX_DIRECTORY/*) ]]; then
+  echo "This is not first Deploy"
 else
- echo "nginx syntax check success!"
+  echo "This is first Deploy"
+  
+  #현재 포트 지정
+  CURRENT_PORT=5000
+  echo "CURRENT_PORT is $CURRENT_PORT"
+  
+  #폴더 생성 및 APP파일 복사
+  mkdir lendit lendit2
+  cp app_$CURRENT_PORT.py $DEPLOY_DIRECTORY/lendit
+  xargs -n 1 cp -v requirement.txt <<<"$DEPLOY_DIRECTORY/lendit $DEPLOY_DIRECTORY/lendit2"
+  cd $DEPLOY_DIRECTORY/lendit
+  
+  #Python 설정
+  APP_PORT=$CURRENT_PORT
+  Python_Config
+
+  #Nginx복사
+  cd $DEPLOY_DIRECTORY
+  sudo cp cicd_$CURRENT_PORT.conf $NGINX_DIRECTORY/
+  
+  #Nginx Syntax_Check
+  Nginx_Check
+  sudo systemctl start nginx
+  
+  #Health_Check
+  Health_Check
+  exit 0
 fi
 
-#python 확인
-count=$(ps -ef | grep python | wc -l)
-pid=$(sudo netstat -tnlp | grep python | awk {'print $7'} | cut -d "/" -f1)
+#배포가 2번 이상부터~~~
 
+#Nginx Port 확인
+CURRENT_PORT=$(cat $NGINX_DIRECTORY/cicd_*.conf | grep -E -o "127.0.0.1:[0-9]{1,5}" | cut -d ":" -f2)
+echo "CURRNET_PORT is $CURRENT_PORT"
 
-if [[ $count > 1 ]];
-then
- echo "python is running and kill now"
- kill $pid
+#Target Port 확인
+if [[ $CURRENT_PORT == "5000" ]]; then
+  echo "5000 is not TARGET_PORT"
+  APP_DIRECTORY=$DEPLOY_DIRECTORY/lendit2
+  TARGET_PORT=5001
 else
- echo "python is not running"
+  echo "5000 is TARGET_PORT"
+  APP_DIRECTORY=$DEPLOY_DIRECTORY/lendit
+  TARGET_PORT=5000
 fi
 
-#venv
-python3 -m venv venv
-source venv/bin/activate
+echo "TARGET_PORT IS $TARGET_PORT and APP_DIRECTORY is $APP_DIRECTORY"
 
-#install
-pip install flask
+#Python Port Kill and Status Check
+echo "Python_$CURRENT_PORT is Running and kill now"
+fuser -k $CURRENT_PORT/tcp
 
-#pip upgrade
-pip install --upgrade pip
-
-#run
-nohup flask --app app run > nohup.out 2>&1 &
-
-sleep 5
-#curl test
-
-curl -s 127.0.0.1/health_check > log.log
-
-sleep 5
-
-#health_check
-health_check=$(cat log.log | grep OK)
-
-if [[ -n $health_check ]];
-then
-  echo "Health_Check is Good"
+if [[ $(fuser $CURRENT_PORT/tcp) ]]; then
+  echo "$CURRENT_PORT is alive, Error!"
+  exit 1
 else
-  echo "Fail"
-  exit
+  echo "$CURRENT_PORT is dead, Success!"
 fi
+
+#Copy APP
+cp app_$TARGET_PORT.py $DEPLOYMENT_DIRECTORY
+
+#Pyhton Build
+APP_PORT=$TARGET_PORT
+cd $APP_DIRECTORY
+if [[ -d venv ]]; then
+  source venv/bin/activate
+  nohup python app_$APP_PORT.py &
+  sleep 5
+else  
+  Python_Config
+fi
+
+#Nginx File Copy
+echo "Nginx file Copy"
+sudo rm -f $NGINX_DIRECTORY/cicd_$CURRENT_PORT.conf
+sudo cp $DEPLOY_DIRECTORY/cicd_$TARGET_PORT.conf $NGINX_DIRECTORY/
+
+#Nginx Syntax_Check
+Nginx_Check
+sudo systemctl reload nginx
+
+#Health_Check
+Health_Check
 
 echo "script finished"
