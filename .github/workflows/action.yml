@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v2.5.0
 
       - name: copy to upload dir
-      - run: mkdir upload
+        run: mkdir upload
       - run: cp -r source deploy/* upload/
       - run: tar -cvf app.tar ./upload
 
@@ -46,32 +46,3 @@ jobs:
             --deployment-config-name CodeDeployDefault.AllAtOnce \
             --deployment-group-name test \
             --s3-location bucket=nasirbucket4342,bundleType=tar,key=lendit-cicd-test/app.tar
-
-# https://docs.aws.amazon.com/ko_kr/codedeploy/latest/userguide/tutorials-github-verify.html
-# 아래 명령어를 통해 특정 배포의 결과를 조회 가능
-# echo $(aws deploy get-deployment --deployment-id d-PVETBX9SJ --query "deploymentInfo.[status, creator]" --output text)
-
-# https://github.com/marketplace/actions/deployment-status
-# steps.deployment.outputs.deployment_id 부분 처럼 앞단계의 deployment_id를 받아올 수 있는지 확인
-#       - name: Update deployment status (success)
-#         if: success()
-#         uses: chrnorm/deployment-status@v2
-#         with:
-#           token: '${{ github.token }}'
-#           environment-url: http://my-app-url.com
-#           state: 'success'
-#           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-
-# https://platform.sh/blog/2021/measuring-the-success-of-a-deployment-with-githubactions
-# HTTP 요청으로 health_check OK 수신을 기준으로 배포완료 여부 확인?
-#   deploy_status:
-#     needs: tar
-#     runs-on: ubuntu-latest
-#     if: tar.steps.
-
-#         steps:
-#             - name: 'Application should deploy successfully'
-#               uses: lakuapik/gh-actions-http-status@v1
-#               with:
-#                 sites: '["${{ needs.build.outputs.env_url }}"]'
-#                 expected: '[200]'
