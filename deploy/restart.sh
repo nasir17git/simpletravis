@@ -8,7 +8,7 @@ NGINX_DIRECTORY=/etc/nginx/conf.d
 function Python_Running_Config(){
   python3 -m venv venv
   source venv/bin/activate
-  pip install -r requirements.txt
+  pip install -r $DEPLOY_DIRECTORY/requirements.txt
   nohup flask --app app run --port=$APP_PORT > nohup.out 2>&1 &
   sleep 5
 }
