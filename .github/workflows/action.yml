@@ -26,9 +26,9 @@ jobs:
         uses: actions/checkout@v2.5.0
 
       - name: copy to upload dir
-        run: mkdir upload
-        run: cp -r source deploy/* upload/
-        run: tar -cvf app.tar ./upload
+      - run: mkdir upload
+      - run: cp -r source deploy/* upload/
+      - run: tar -cvf app.tar ./upload
 
       - name: aws 
         uses: aws-actions/configure-aws-credentials@v1
