@@ -17,7 +17,7 @@ function Python_Config(){
 function Health_Check() {
   if [[ $(curl -s 127.0.0.1/health_check | grep -o "OK") ]];
     then
-  echo/script "Health_Check OK"
+  echo "Health_Check OK"
     else
   echo "Health_Check Fail"
   exit 1
