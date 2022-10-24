@@ -101,7 +101,7 @@ else
 fi
 
 #Copy APP
-cp source/app_$TARGET_PORT.py $DEPLOYMENT_DIRECTORY
+cp source/app_$TARGET_PORT.py $DEPLOY_DIRECTORY
 
 #Pyhton Build
 APP_PORT=$TARGET_PORT
