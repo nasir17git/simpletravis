@@ -31,19 +31,14 @@ jobs:
               cp -r source deploy/* upload/
               tar -cvf app.tar ./upload
 
-      - name: aws 
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: AWS CodeDeploy
+        uses: sourcetoad/aws-codedeploy-action@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: s3 upload
-        run: aws s3 cp ./app.tar s3://nasirbucket4342/lendit-cicd-test/
-
-      - name: 배포 생성
-        run: |
-            aws deploy create-deployment --application-name test \
-            --deployment-config-name CodeDeployDefault.AllAtOnce \
-            --deployment-group-name test \
-            --s3-location bucket=nasirbucket4342,bundleType=tar,key=lendit-cicd-test/app.tar
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ secrets.AWS_REGION }}
+          codedeploy_name: test
+          codedeploy_group: test
+          s3_bucket: nasirbucket4342
+          s3_folder: lendit-cicd-test
+          directory: ./upload
