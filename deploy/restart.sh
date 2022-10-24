@@ -17,7 +17,7 @@ function Python_Config(){
 function Health_Check() {
   if [[ $(curl -s 127.0.0.1/health_check | grep -o "OK") ]];
     then
-  echo "Health_Check OK"
+  echo/script "Health_Check OK"
     else
   echo "Health_Check Fail"
   exit 1
@@ -49,7 +49,7 @@ else
   
   #폴더 생성 및 APP파일 복사
   mkdir lendit lendit2
-  cp app_$CURRENT_PORT.py $DEPLOY_DIRECTORY/lendit
+  cp source/app_$CURRENT_PORT.py $DEPLOY_DIRECTORY/lendit
   xargs -n 1 cp -v requirement.txt <<<"$DEPLOY_DIRECTORY/lendit $DEPLOY_DIRECTORY/lendit2"
   cd $DEPLOY_DIRECTORY/lendit
   
@@ -101,7 +101,7 @@ else
 fi
 
 #Copy APP
-cp app_$TARGET_PORT.py $DEPLOYMENT_DIRECTORY
+cp source/app_$TARGET_PORT.py $DEPLOYMENT_DIRECTORY
 
 #Pyhton Build
 APP_PORT=$TARGET_PORT
