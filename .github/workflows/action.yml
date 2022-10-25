@@ -45,3 +45,4 @@ jobs:
           s3_bucket: nasirbucket4342
           s3_folder: lendit-cicd-test
           directory: ./upload
+          archive: app.zip
