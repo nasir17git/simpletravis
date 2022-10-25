@@ -36,6 +36,7 @@ jobs:
 
       - name: AWS CodeDeploy
         uses: sourcetoad/aws-codedeploy-action@v1
+        id: codedeploy
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -46,3 +47,11 @@ jobs:
           s3_folder: lendit-cicd-test
           directory: ./upload
           archive: app.zip
+
+      - name: output check
+        run: echo $GITHUB_OUTPUT
+
+      - name: output check2
+        run: echo ${{steps.codedeploy.outputs.etag}}
+
+      
