@@ -49,6 +49,7 @@ jobs:
           archive: app.zip
 
       - name: output check
+        if: success()
         run: |
               echo $GITHUB_OUTPUT
               cat $GITHUB_OUTPUT
