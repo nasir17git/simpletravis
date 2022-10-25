@@ -49,9 +49,9 @@ jobs:
           archive: app.zip
 
       - name: output check
-        run: echo $GITHUB_OUTPUT
+        run: cat $GITHUB_OUTPUT
 
       - name: output check2
-        run: echo ${{steps.codedeploy.outputs.etag}}
+        run: echo ${{steps.codedeploy.outputs}}
 
       
