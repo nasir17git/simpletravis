@@ -31,6 +31,8 @@ jobs:
               cp -r source deploy/* upload/
               zip -r app.zip upload
               export INPUT_ARCHIVE=app.zip
+              ls -alh
+              echo $INPUT_ARCHIVE
 
       - name: AWS CodeDeploy
         uses: sourcetoad/aws-codedeploy-action@v1
