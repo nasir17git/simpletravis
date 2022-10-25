@@ -30,7 +30,7 @@ jobs:
               mkdir upload
               cp -r source deploy/* upload/
               zip -r app.zip upload
-              INPUT_ARCHIVE=app.zip
+              export INPUT_ARCHIVE=app.zip
 
       - name: AWS CodeDeploy
         uses: sourcetoad/aws-codedeploy-action@v1
