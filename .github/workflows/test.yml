@@ -41,8 +41,8 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: ${{ secrets.AWS_REGION }}
-          codedeploy_name: cicd-test-cd-app
-          codedeploy_group: cicd-test-deploy-group
+          codedeploy_name: third-cd-app
+          codedeploy_group: third-deploy-group
           s3_bucket: nasirbucket4342
           s3_folder: lendit-cicd-test
           directory: ./upload
